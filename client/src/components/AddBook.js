@@ -24,16 +24,34 @@ class AddBook extends Component {
     }
   };
 
+  validate = () => {
+    const { name, genre, authorId } = this.state;
+    if (!name) {
+      alert("You must enter book name!");
+    }
+    if (!genre) {
+      alert("You must enter genre!");
+    }
+    if (!authorId) {
+      alert("You must select an author!");
+    }
+  };
+
   submitForm = e => {
     e.preventDefault();
-    this.props.addBookMutation({
-      variables: {
-        name: this.state.name,
-        genre: this.state.genre,
-        authorId: this.state.authorId
-      },
-      refetchQueries: [{ query: getBooksQuery }]
-    });
+    this.validate();
+    const { name, genre, authorId } = this.state;
+    if (name && genre && authorId) {
+      this.props.addBookMutation({
+        variables: {
+          name,
+          genre,
+          authorId
+        },
+        refetchQueries: [{ query: getBooksQuery }]
+      });
+      this.setState({ name: "", genre: "", authorId: "" });
+    }
   };
 
   render() {
@@ -44,6 +62,7 @@ class AddBook extends Component {
           <input
             type="text"
             onChange={e => this.setState({ name: e.target.value })}
+            value={this.state.name}
           />
         </div>
         <div className="field">
@@ -51,11 +70,15 @@ class AddBook extends Component {
           <input
             type="text"
             onChange={e => this.setState({ genre: e.target.value })}
+            value={this.state.genre}
           />
         </div>
         <div className="field">
           <label>Author:</label>
-          <select onChange={e => this.setState({ authorId: e.target.value })}>
+          <select
+            onChange={e => this.setState({ authorId: e.target.value })}
+            value={this.state.authorId}
+          >
             <option>Select author</option>
             {this.displayAuthors()}
           </select>
