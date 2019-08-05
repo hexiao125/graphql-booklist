@@ -3,6 +3,7 @@ const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -26,6 +27,14 @@ app.use(
     graphiql: true
   })
 );
+
+//serve static files from the React app
+app.use(express.static(path.join(__dirname, "client/build")));
+
+// the catch-all handler
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
