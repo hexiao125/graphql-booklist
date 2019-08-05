@@ -29,5 +29,5 @@ app.use(
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
-  console.log("now listeing for requests on port 4000");
+  console.log(`now listeing for requests on port ${port}`);
 });
